@@ -1,0 +1,33 @@
+{
+  "name": "nuxt-app",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "build": "nuxt build",
+    "dev": "nuxt dev",
+    "generate": "nuxt generate",
+    "preview": "nuxt preview",
+    "postinstall": "nuxt prepare"
+  },
+  "dependencies": {
+    "@nuxt/image": "^1.9.0",
+    "@nuxtjs/google-fonts": "^3.2.0",
+    "@nuxtjs/tailwindcss": "^6.13.1",
+    "@primevue/themes": "^4.2.5",
+    "@vueuse/nuxt": "^12.5.0",
+    "jspdf": "^2.5.2",
+    "modern-screenshot": "^4.5.5",
+    "nodemailer": "^6.10.0",
+    "nuxt": "^3.15.3",
+    "nuxt-svgo": "^4.0.13",
+    "primevue": "^4.2.5",
+    "quill": "^2.0.3",
+    "vue": "latest",
+    "vue-router": "latest"
+  },
+  "devDependencies": {
+    "@primevue/nuxt-module": "^4.2.5",
+    "@types/nodemailer": "^6.4.17",
+    "vite-plugin-pug": "^0.4.1"
+  }
+}

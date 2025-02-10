@@ -1,0 +1,45 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+* {
+	box-sizing: border-box;
+	scroll-behavior: smooth;
+	scrollbar-width: thin;
+}
+
+body {
+	font-family: "Jost", sans-serif;
+}
+
+@layer base {
+	strong {
+		@apply font-semibold;
+	}
+
+	label {
+		@apply text-sm tracking-tight block;
+	}
+
+	input {
+		@apply w-full focus:outline-none text-sm p-2;
+	}
+
+	textarea {
+		@apply w-full resize-none focus:outline-none text-sm p-2;
+	}
+}
+
+@layer utilities {
+	.input-group {
+		@apply space-y-2 w-full p-2 max-lg:px-0;
+	}
+
+	.button {
+		@apply w-full;
+	}
+
+	.resume-title {
+		@apply border-b border-b-black uppercase font-medium tracking-tight pb-1 mb-5;
+	}
+}
