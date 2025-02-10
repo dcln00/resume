@@ -5,6 +5,7 @@ export default defineNuxtConfig({
 	modules: [
 		'@nuxtjs/google-fonts',
 		'@nuxtjs/tailwindcss',
+		'@nuxtjs/device',
 		'nuxt-svgo',
 		'@nuxt/image',
 		'@primevue/nuxt-module',
