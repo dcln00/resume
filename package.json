@@ -15,6 +15,7 @@
     "@nuxtjs/google-fonts": "^3.2.0",
     "@nuxtjs/tailwindcss": "^6.13.1",
     "@primevue/themes": "^4.2.5",
+    "@vercel/analytics": "^1.5.0",
     "@vueuse/nuxt": "^12.5.0",
     "jspdf": "^2.5.2",
     "modern-screenshot": "^4.5.5",

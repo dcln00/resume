@@ -22,6 +22,7 @@ const show = ref(true)
 </script>
 
 <template lang="pug">
+Analytics
 div(v-if="$device.isMobile" class="h-screen flex justify-center items-center")
 	p Kindly access app from desktop
 div(v-if="$device.isDesktop")
