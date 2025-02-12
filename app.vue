@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { Analytics } from '@vercel/analytics/nuxt'
+import { useStorage } from '@vueuse/core'
 
 useHead({
 	title: 'Resume by Nii Aryeh',

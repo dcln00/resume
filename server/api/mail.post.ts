@@ -17,7 +17,7 @@ export default defineEventHandler(async (event) => {
 	})
 
 	await transporter.sendMail({
-		from: config.mailUser,
+		from: `Resume by Nii Aryeh <resume@niiaryeh.com>`,
 		to: body.to,
 		subject: body.subject,
 		attachments: [
