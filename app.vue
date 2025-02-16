@@ -21,7 +21,7 @@ useSeoMeta({
 	ogImageHeight: 600,
 })
 
-const show = ref(true)
+const show = useStorage('donate-banner', true, sessionStorage)
 </script>
 
 <template lang="pug">

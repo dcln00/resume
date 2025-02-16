@@ -14,10 +14,7 @@ definePageMeta({
 	}]
 })
 
-
-localStorage.removeItem('resume-input')
-
-const input = ref({
+const input = useStorage('resume-input', {
 	profile: {
 		name: 'Nii Aryeh',
 		phone: '+233 20 123 4567',
