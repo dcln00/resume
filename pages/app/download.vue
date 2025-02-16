@@ -1,8 +1,4 @@
 <script setup lang="ts">
-// const url = useState('url')
-// const screenshot = useState('screenshot')
-// const email = useState('email')
-
 useHead({
 	title: 'Download - Resume by Nii Aryeh',
 })

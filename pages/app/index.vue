@@ -14,7 +14,10 @@ definePageMeta({
 	}]
 })
 
-const input = useStorage('resume-input', {
+
+localStorage.removeItem('resume-input')
+
+const input = ref({
 	profile: {
 		name: 'Nii Aryeh',
 		phone: '+233 20 123 4567',
@@ -40,6 +43,7 @@ const input = useStorage('resume-input', {
 				date: '2020 - Current',
 				location: 'Accra, Ghana',
 				description: '<ol><li data-list="ordered"><span class="ql-ui" contenteditable="false"></span>Worked with a variety of clients to create and execute creative concepts as well as manage projects from start to finish.</li></ol>',
+				paraphrased:''
 			},
 		]
 	},
@@ -201,11 +205,21 @@ const handleAddExperience = () => {
 		date: '',
 		location: '',
 		description: '',
+		paraphrased: ''
 	})
 }
 
 const handleRemoveExperience = (idx: number) => {
 	input.value.experience.data.splice(idx, 1)
+}
+
+const paraphrase = async (idx: number) => {
+	const res = await $fetch('/api/ai', {
+		method: 'POST',
+		body: { text: input.value.experience.data[idx] },
+	})
+
+	input.value.experience.data[idx].paraphrased = res
 }
 
 const handleAddSkills = () => {
@@ -320,8 +334,8 @@ section#body-outlet
 												button(class="ql-underline")
 												button(class="ql-list" value="ordered")
 												button(class="ql-list" value="bullet")
-								//- .button(class="p-2")
-									button(type="button" class="w-full bg-brand-accent text-white text-xs uppercase p-2") Paraphrase with AI
+								.button(class="p-2")
+									button(type="button" class="w-full bg-brand-accent hover:bg-brand-hover text-white text-xs uppercase p-2" @click="paraphrase(idx)") Paraphrase with AI
 								.delete-input(v-if="input.experience.data.length > 1" class="pt-4 cursor-pointer ms-auto" @click="handleRemoveExperience(idx)")
 									svgo-delete(class="text-2xl text-red-500")
 						.button(class="mt-8")
