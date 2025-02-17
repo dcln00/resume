@@ -14,9 +14,9 @@ definePageMeta({
 	}]
 })
 
-localStorage.clear()
+localStorage.removeItem('resume-input')
 
-const input = useStorage('resume-input', {
+const input = useStorage('resume', {
 	profile: {
 		name: 'Your name here',
 		phone: '+233 20 123 4567',
