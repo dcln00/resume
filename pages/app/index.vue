@@ -14,6 +14,8 @@ definePageMeta({
 	}]
 })
 
+localStorage.clear()
+
 const input = useStorage('resume-input', {
 	profile: {
 		name: 'Your name here',
