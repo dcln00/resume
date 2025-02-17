@@ -16,17 +16,17 @@ definePageMeta({
 
 const input = useStorage('resume-input', {
 	profile: {
-		name: 'Nii Aryeh',
+		name: 'Your name here',
 		phone: '+233 20 123 4567',
-		email: 'work@niiaryeh.com',
+		email: 'abc@email.com',
 		social: 'linkedin.com/',
 	},
 	education: {
 		show: true,
 		data: [
 			{
-				institution: 'University of Ghana',
-				programme: 'BSc. Business Administration',
+				institution: 'Name of University',
+				programme: 'BSc. Name of Programme',
 				date: '2015 - 2019',
 			},
 		]
@@ -35,11 +35,11 @@ const input = useStorage('resume-input', {
 		show: true,
 		data: [
 			{
-				position: 'Software Developer',
-				company: '22 Design Studios',
+				position: 'Digital Marketer',
+				company: 'Reputable Company',
 				date: '2020 - Current',
 				location: 'Accra, Ghana',
-				description: '<ol><li data-list="ordered"><span class="ql-ui" contenteditable="false"></span>Worked with a variety of clients to create and execute creative concepts as well as manage projects from start to finish.</li></ol>',
+				description: '<ol><li data-list="ordered"><span class="ql-ui" contenteditable="false"></span>Lorem ipsum dolor sit amet consectetur, adipisicing elit. At accusamus molestiae provident, non cumque recusandae molestias dignissimos ullam id ut.</li></ol>',
 				paraphrased:''
 			},
 		]
@@ -48,8 +48,8 @@ const input = useStorage('resume-input', {
 		show: true,
 		data: [
 			{
-				name: 'Software Development',
-				summary: '<p>Languages: HTML/CSS, Javascript, Python, Typescript</p><p>Frameworks: React, TailwindCSS, Nodejs</p>',
+				name: 'Social Media Marketing',
+				summary: '<p>Tools: Mailchimp, Google Ads, Pinterest</p>',
 			},
 		]
 	},
@@ -57,10 +57,10 @@ const input = useStorage('resume-input', {
 		show: true,
 		data: [
 			{
-				name: 'Streamlab',
-				portfolio: 'streamlab.niiaryeh.com',
+				name: 'Lorem Ipsum',
+				portfolio: 'abc.com',
 				date: '2022',
-				summary: '<p>Developed using vue fundamentals including hooks, components and conditional rendering</p><p>Movie database app built with Nuxt 3 + typescript</p>',
+				summary: '<p>Lorem ipsum dolor sit amet consectetur, adipisicing elit. At accusamus molestiae provident.</p>',
 			},
 		]
 	},
@@ -76,7 +76,7 @@ const input = useStorage('resume-input', {
 		show: false,
 		data: {
 			name: 'Portfolio',
-			summary: `niiaryeh.com`
+			summary: `lorem.com`
 		}
 	}
 })
