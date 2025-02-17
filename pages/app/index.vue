@@ -88,6 +88,7 @@ const screenshot = useState('screenshot', () => '')
 const url = useState('url', () => null)
 const trigger = ref(null)
 const isSaving = ref(false)
+const isParaphrasing = ref(false)
 const width = ref(0)
 const height = ref(0)
 
@@ -211,12 +212,22 @@ const handleRemoveExperience = (idx: number) => {
 }
 
 const paraphrase = async (idx: number) => {
-	const res = await $fetch('/api/ai', {
-		method: 'POST',
-		body: { text: input.value.experience.data[idx] },
-	})
 
-	input.value.experience.data[idx].paraphrased = res
+	try {
+		isParaphrasing.value = true
+
+		const res = await $fetch('/api/gemini', {
+			method: 'POST',
+			body: { prompt: input.value.experience.data[idx].description },
+		})
+	
+		input.value.experience.data[idx].paraphrased = res
+	} catch(e) {
+		console.log(e)
+	} finally {
+		isParaphrasing.value = false
+	}
+
 }
 
 const handleAddSkills = () => {
@@ -332,7 +343,14 @@ section#body-outlet
 												button(class="ql-list" value="ordered")
 												button(class="ql-list" value="bullet")
 								.button(class="p-2")
-									button(type="button" class="w-full bg-brand-accent hover:bg-brand-hover text-white text-xs uppercase p-2" @click="paraphrase(idx)") Paraphrase with AI
+									button(v-if="!isParaphrasing" type="button" class="w-full bg-brand-accent hover:bg-brand-hover text-white text-xs uppercase p-2" @click="paraphrase(idx)") Paraphrase with gemini AI
+									button(v-else type="button" class="w-full bg-brand-accent hover:bg-brand-hover h-8 text-white text-xs uppercase p-2" @click="paraphrase(idx)")
+										svgo-spinner(class="mx-auto")
+								.input-group(v-if="ex.paraphrased" :class="[{'animate-pulse pointer-events-none': isParaphrasing}]")
+									div(class="flex")
+										label(for="paraphrased-text") Paraphrased Text
+										label(class="ms-auto text-red-500 cursor-pointer" @click="() => ex.paraphrased = ''") Clear
+									textarea(readonly id="paraphrased-text" name="paraphrased-text" rows="6") {{ lineBlock(ex.paraphrased) }}
 								.delete-input(v-if="input.experience.data.length > 1" class="pt-4 cursor-pointer ms-auto" @click="handleRemoveExperience(idx)")
 									svgo-delete(class="text-2xl text-red-500")
 						.button(class="mt-8")

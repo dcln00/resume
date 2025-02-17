@@ -26,7 +26,7 @@ export default defineNuxtConfig({
 		mailHost: process.env.NUXT_MAIL_HOST,
 		mailUser: process.env.NUXT_MAIL_USER,
 		mailPass: process.env.NUXT_MAIL_PASS,
-		openaiApiKey: process.env.NUXT_OPENAI_API_KEY
+		geminiApiKey: process.env.NUXT_GEMINI_API_KEY
 	},
 	nitro: {
 		preset: 'vercel',
