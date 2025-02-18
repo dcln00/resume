@@ -9,7 +9,7 @@ defineExpose({
 </script>
 
 <template lang="pug">
-.resume(ref="res" :class="['relative w-[8.5in] min-h-[11in] bg-white origin-top-left mx-auto pt-[1in] px-[.5in] flex flex-col', {'pb-[.5in]': input.footer.show}, {'pb-[1in]': !input.footer.show}]")
+.resume(ref="res" :class="['relative w-[8.5in] min-h-[11in] bg-white origin-top-left mx-auto py-[1in] px-[.5in] flex flex-col']")
 	//- .trigger(ref="trigger" class="absolute bottom-[1in] left-0 w-full h-[1px]")
 	header(class=" mb-8")
 		h1(class="text-center text-xl uppercase font-black tracking-tight") {{ input.profile.name }}
@@ -17,7 +17,7 @@ defineExpose({
 			span(v-if="input.profile.phone" class="after:content-['|'] last:after:content-[''] after:ps-1") {{ input.profile.phone }}
 			span(v-if="input.profile.email" class="after:content-['|'] last:after:content-[''] after:ps-1") {{ input.profile.email }}
 			span(v-if="input.profile.social" class="after:content-['|'] last:after:content-['']") {{ input.profile.social }}
-	.resume-body(:class="['space-y-4', {'pb-[1in]': input.footer.show}]")
+	.resume-body(:class="['space-y-4']")
 		section#education(v-if="input.education.show")
 			h2.resume-title Education
 			.details(v-for="(ed, idx) in input.education.data" :key="idx" class="flex pb-4 *:text-[10pt]")
@@ -55,7 +55,7 @@ defineExpose({
 				.details(v-for="(ref, idx) in input.references.data" :key="idx" class="p-4 *:text-[10pt]")
 					.ref(v-html="ref.reference" class="*:has-[li]:list-disc *:has-[li]:ps-2")
 
-	footer(v-if="input.footer.show" class="*:text-[10pt]")
+	footer(v-if="input.footer.show" class="*:text-[10pt] absolute bottom-[.5in]")
 		.footer-title(class="font-semibold tracking-tight") {{ input.footer.data.name }}
 		.footer-text {{ input.footer.data.summary }}
 </template>
