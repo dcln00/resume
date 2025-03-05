@@ -2,6 +2,11 @@
 import { useStorage, useElementSize } from '@vueuse/core'
 const { $screenshot, $pdf } = useNuxtApp() as any
 const email = useState('email')
+const router = useRouter()
+
+router.onError((error) => {
+	localStorage.removeItem('resume')
+})
 
 useHead({
 	title: 'App - Resume by Nii Aryeh',
@@ -10,10 +15,6 @@ useHead({
 definePageMeta({
 	middleware: [async () => {
 		const email = useState('email')
-		const router = useRouter()
-		router.onError((error) => {
-			localStorage.removeItem('resume')
-		})
 		if (!email.value) return navigateTo('/')
 	}]
 })
