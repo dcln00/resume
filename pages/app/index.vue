@@ -2,11 +2,6 @@
 import { useStorage, useElementSize } from '@vueuse/core'
 const { $screenshot, $pdf } = useNuxtApp() as any
 const email = useState('email')
-const router = useRouter()
-
-router.onError((error) => {
-	localStorage.removeItem('resume')
-})
 
 useHead({
 	title: 'App - Resume by Nii Aryeh',
@@ -19,7 +14,9 @@ definePageMeta({
 	}]
 })
 
-const input = useStorage('resume', {
+localStorage.removeItem('resume')
+
+const input = useStorage('res', {
 	profile: {
 		name: 'Your name here',
 		phone: '+233 20 123 4567',
