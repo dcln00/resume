@@ -10,11 +10,13 @@ useHead({
 definePageMeta({
 	middleware: [async () => {
 		const email = useState('email')
+		const router = useRouter()
+		router.onError((error) => {
+			localStorage.removeItem('resume')
+		})
 		if (!email.value) return navigateTo('/')
 	}]
 })
-
-localStorage.removeItem('resume-input')
 
 const input = useStorage('resume', {
 	profile: {
@@ -23,7 +25,19 @@ const input = useStorage('resume', {
 		email: 'abc@email.com',
 		social: 'linkedin.com/',
 	},
+	summary: {
+		title: {
+			name: 'Summary',
+			show: true
+		},
+		show: false,
+		data: '<p>Self-motivated and detail-oriented digital marketer with a passion for creating engaging content. Proficient in social media marketing and email marketing. Experienced in creating and managing marketing campaigns.</p>',
+	},
 	education: {
+		title: {
+			name: 'Education',
+			show: true
+		},
 		show: true,
 		data: [
 			{
@@ -34,6 +48,10 @@ const input = useStorage('resume', {
 		]
 	},
 	experience: {
+		title: {
+			name: 'Experience',
+			show: true
+		},
 		show: true,
 		data: [
 			{
@@ -47,6 +65,10 @@ const input = useStorage('resume', {
 		]
 	},
 	skills: {
+		title: {
+			name: 'Skills',
+			show: true
+		},
 		show: true,
 		data: [
 			{
@@ -56,6 +78,10 @@ const input = useStorage('resume', {
 		]
 	},
 	projects: {
+		title: {
+			name: 'Projects',
+			show: true
+		},
 		show: true,
 		data: [
 			{
@@ -67,6 +93,10 @@ const input = useStorage('resume', {
 		]
 	},
 	references: {
+		title: {
+			name: 'References',
+			show: true
+		},
 		show: true,
 		data: [
 			{
@@ -91,6 +121,7 @@ const url = useState('url', () => null)
 const trigger = ref(null)
 const isSaving = ref(false)
 const isParaphrasing = ref(false)
+const isSuggesting = ref(false)
 const width = ref(0)
 const height = ref(0)
 
@@ -177,6 +208,7 @@ const handleClearInput = () => {
 	input.value.profile.phone = ''
 	input.value.profile.email = ''
 	input.value.profile.social = ''
+	input.value.summary.data = ''
 	input.value.education.data = []
 	input.value.experience.data = []
 	input.value.skills.data = []
@@ -218,7 +250,7 @@ const paraphrase = async (idx: number) => {
 	try {
 		isParaphrasing.value = true
 
-		const res = await $fetch('/api/gemini', {
+		const res = await $fetch('/api/ai/paraphrase', {
 			method: 'POST',
 			body: { prompt: input.value.experience.data[idx].description },
 		})
@@ -229,7 +261,27 @@ const paraphrase = async (idx: number) => {
 	} finally {
 		isParaphrasing.value = false
 	}
+}
 
+const aiSuggestion = async () => {
+	try {
+		isSuggesting.value = true
+
+		const jobTitle = prompt('Enter Your Job Title eg. Graphic Designer')
+
+		if (!jobTitle) return
+
+		const res = await $fetch('/api/ai/suggestion', {
+			method: 'POST',
+			body: { prompt: `as a ${jobTitle}, write a 30-50 word brief summary for a cv` },
+		})
+	
+		input.value.summary.data = removeQuotes(res)
+	} catch(e) {
+		console.log(e)
+	} finally {
+		isSuggesting.value = false
+	}
 }
 
 const handleAddSkills = () => {
@@ -294,8 +346,37 @@ section#body-outlet
 							label(for="social") Social Media Url
 							input(type="text" id="social" name="social" v-model="input.profile.social" placeholder="linkedin.com/in/")
 				div
-					div(class="pb-6 flex items-center")
-						.form-title(class="uppercase font-bold tracking-tight text-lg") Education
+					div(class="pb-6 flex items-center h-[60px]")
+						div(class="flex items-center space-x-2")
+							.form-title(v-if="input.summary.title.show" class="uppercase font-bold tracking-tight text-lg") {{ input.summary.title.name }}
+							input(v-else type="text" maxlength="25" id="title" name="title" v-model="input.summary.title.name" @keyup.enter="() => input.summary.title.show = !input.summary.title.show")
+							svgo-edit(v-if="input.summary.title.show" class="text-neutral-500 cursor-pointer" @click="() => input.summary.title.show = !input.summary.title.show")
+							svgo-tick(v-else class="text-neutral-500 cursor-pointer" @click="() => input.summary.title.show = !input.summary.title.show")
+						Toggle(class="ms-auto cursor-pointer" @toggle="() => input.summary.show = !input.summary.show" :trigger="input.summary.show")
+					div(class="relative")
+						Overlay(v-if="!input.summary.show")
+						div
+							.input-group
+								label Summary
+								Editor(v-model="input.summary.data" pt:root="bg-white"  editorStyle="height: 120px" unstyled placeholder="Self-motivated and detail-oriented digital marketer with a passion for creating engaging content.")
+									template(v-slot:toolbar)
+										span(class="ql-formats")
+											button(class="ql-bold")
+											button(class="ql-italic")
+											button(class="ql-underline")
+											button(class="ql-list" value="ordered")
+											button(class="ql-list" value="bullet")
+							.button(class="p-2")
+								button(v-if="!isSuggesting" type="button" class="w-full bg-brand-accent hover:bg-brand-hover text-white text-xs uppercase p-2" @click="aiSuggestion()") Suggestions with gemini AI
+								button(v-else type="button" class="w-full bg-brand-accent hover:bg-brand-hover h-8 text-white text-xs uppercase p-2")
+									svgo-spinner(class="mx-auto")
+				div
+					div(class="pb-6 flex items-center h-[60px]")
+						div(class="flex items-center space-x-2")
+							.form-title(v-if="input.education.title.show" class="uppercase font-bold tracking-tight text-lg") {{ input.education.title.name }}
+							input(v-else type="text" maxlength="25" id="title" name="title" v-model="input.education.title.name" @keyup.enter="() => input.education.title.show = !input.education.title.show")
+							svgo-edit(v-if="input.education.title.show" class="text-neutral-500 cursor-pointer" @click="() => input.education.title.show = !input.education.title.show")
+							svgo-tick(v-else class="text-neutral-500 cursor-pointer" @click="() => input.education.title.show = !input.education.title.show")
 						Toggle(class="ms-auto cursor-pointer" @toggle="() => input.education.show = !input.education.show" :trigger="input.education.show")
 					div(class="relative")
 						Overlay(v-if="!input.education.show")
@@ -315,8 +396,12 @@ section#body-outlet
 						.button(class="mt-8")
 							button(type="button" class="border border-zinc-800 border-dashed text-xs uppercase w-full p-3 hover:bg-zinc-300 duration-200" @click="handleAddEducation") Add Education
 				div
-					div(class="pb-6 flex items-center")
-						.form-title(class="uppercase font-bold tracking-tight text-lg") Experience
+					div(class="pb-6 flex items-center h-[60px]")
+						div(class="flex items-center space-x-2")
+							.form-title(v-if="input.experience.title.show" class="uppercase font-bold tracking-tight text-lg") {{ input.experience.title.name }}
+							input(v-else type="text" maxlength="25" id="title" name="title" v-model="input.experience.title.name" @keyup.enter="() => input.experience.title.show = !input.experience.title.show")
+							svgo-edit(v-if="input.experience.title.show" class="text-neutral-500 cursor-pointer" @click="() => input.experience.title.show = !input.experience.title.show")
+							svgo-tick(v-else class="text-neutral-500 cursor-pointer" @click="() => input.experience.title.show = !input.experience.title.show")
 						Toggle(class="ms-auto cursor-pointer" @toggle="() => input.experience.show = !input.experience.show" :trigger="input.experience.show")
 					div(class="relative")
 						Overlay(v-if="!input.experience.show")
@@ -346,7 +431,7 @@ section#body-outlet
 												button(class="ql-list" value="bullet")
 								.button(class="p-2")
 									button(v-if="!isParaphrasing" type="button" class="w-full bg-brand-accent hover:bg-brand-hover text-white text-xs uppercase p-2" @click="paraphrase(idx)") Paraphrase with gemini AI
-									button(v-else type="button" class="w-full bg-brand-accent hover:bg-brand-hover h-8 text-white text-xs uppercase p-2" @click="paraphrase(idx)")
+									button(v-else type="button" class="w-full bg-brand-accent hover:bg-brand-hover h-8 text-white text-xs uppercase p-2")
 										svgo-spinner(class="mx-auto")
 								.input-group(v-if="ex.paraphrased" :class="[{'animate-pulse pointer-events-none': isParaphrasing}]")
 									div(class="flex")
@@ -358,8 +443,12 @@ section#body-outlet
 						.button(class="mt-8")
 							button(type="button" class="border border-zinc-800 border-dashed text-xs uppercase w-full p-3 hover:bg-zinc-300 duration-200" @click="handleAddExperience") Add Experience
 				div
-					div(class="pb-6 flex items-center")
-						.form-title(class="uppercase font-bold tracking-tight text-lg") Skills
+					div(class="pb-6 flex items-center h-[60px]")
+						div(class="flex items-center space-x-2")
+							.form-title(v-if="input.skills.title.show" class="uppercase font-bold tracking-tight text-lg") {{ input.skills.title.name }}
+							input(v-else type="text" maxlength="25" id="title" name="title" v-model="input.skills.title.name" @keyup.enter="() => input.skills.title.show = !input.skills.title.show")
+							svgo-edit(v-if="input.skills.title.show" class="text-neutral-500 cursor-pointer" @click="() => input.skills.title.show = !input.skills.title.show")
+							svgo-tick(v-else class="text-neutral-500 cursor-pointer" @click="() => input.skills.title.show = !input.skills.title.show")
 						Toggle(class="ms-auto cursor-pointer" @toggle="() => input.skills.show = !input.skills.show" :trigger="input.skills.show")
 					div(class="relative")
 						Overlay(v-if="!input.skills.show")
@@ -383,8 +472,12 @@ section#body-outlet
 						.button(class="mt-8")
 							button(type="button" class="border border-zinc-800 border-dashed text-xs uppercase w-full p-3 hover:bg-zinc-300 duration-200" @click="handleAddSkills") Add Skill
 				div
-					div(class="pb-6 flex items-center")
-						.form-title(class="uppercase font-bold tracking-tight text-lg") Projects
+					div(class="pb-6 flex items-center h-[60px]")
+						div(class="flex items-center space-x-2")
+							.form-title(v-if="input.projects.title.show" class="uppercase font-bold tracking-tight text-lg") {{ input.projects.title.name }}
+							input(v-else type="text" maxlength="25" id="title" name="title" v-model="input.projects.title.name" @keyup.enter="() => input.projects.title.show = !input.projects.title.show")
+							svgo-edit(v-if="input.projects.title.show" class="text-neutral-500 cursor-pointer" @click="() => input.projects.title.show = !input.projects.title.show")
+							svgo-tick(v-else class="text-neutral-500 cursor-pointer" @click="() => input.projects.title.show = !input.projects.title.show")
 						Toggle(class="ms-auto cursor-pointer" @toggle="() => input.projects.show = !input.projects.show" :trigger="input.projects.show")
 					div(class="relative")
 						Overlay(v-if="!input.projects.show")
@@ -415,8 +508,12 @@ section#body-outlet
 						.button(class="mt-8")
 							button(type="button" class="border border-zinc-800 border-dashed text-xs uppercase w-full p-3 hover:bg-zinc-300 duration-200" @click="handleAddProjects") Add Project
 				div
-					div(class="pb-6 flex items-center")
-						.form-title(class="uppercase font-bold tracking-tight text-lg") References
+					div(class="pb-6 flex items-center h-[60px]")
+						div(class="flex items-center space-x-2")
+							.form-title(v-if="input.references.title.show" class="uppercase font-bold tracking-tight text-lg") {{ input.references.title.name }}
+							input(v-else type="text" maxlength="25" id="title" name="title" v-model="input.references.title.name" @keyup.enter="() => input.references.title.show = !input.references.title.show")
+							svgo-edit(v-if="input.references.title.show" class="text-neutral-500 cursor-pointer" @click="() => input.references.title.show = !input.references.title.show")
+							svgo-tick(v-else class="text-neutral-500 cursor-pointer" @click="() => input.references.title.show = !input.references.title.show")
 						Toggle(class="ms-auto cursor-pointer" @toggle="() => input.references.show = !input.references.show" :trigger="input.references.show")
 					div(class="relative")
 						Overlay(v-if="!input.references.show")
