@@ -9,7 +9,7 @@ defineExpose({
 </script>
 
 <template lang="pug">
-.resume(ref="res" :class="['relative w-[8.5in] min-h-[11in] bg-white origin-top-left mx-auto py-[.7in] px-[.5in] flex flex-col', {'pb-[1in]': input.footer.show}]")
+.resume(ref="res" :class="['relative w-[8.5in] min-h-[11in] bg-white origin-top-left mx-auto py-[.7in] px-[.5in] flex flex-col font-custom', {'pb-[1in]': input.footer.show}]")
 	//- .trigger(ref="trigger" class="absolute bottom-[1in] left-0 w-full h-[1px]")
 	header(class=" mb-8")
 		h1(class="text-center text-xl uppercase font-black tracking-tight") {{ input.profile.name }}
