@@ -11,13 +11,13 @@ defineExpose({
 <template lang="pug">
 .resume(ref="res" :class="['relative w-[8.5in] min-h-[11in] bg-white origin-top-left mx-auto py-[.7in] px-[.5in] flex flex-col !font-custom', {'pb-[1in]': input.footer.show}]")
 	//- .trigger(ref="trigger" class="absolute bottom-[1in] left-0 w-full h-[1px]")
-	header(class=" mb-8")
+	header(class=" mb-8 !font-custom")
 		h1(class="text-center text-xl uppercase font-black tracking-tight") {{ input.profile.name }}
 		.sub(class="text-center *:text-[8.5pt] space-x-1")
 			span(v-if="input.profile.phone" class="after:content-['|'] last:after:content-[''] after:ps-1") {{ input.profile.phone }}
 			span(v-if="input.profile.email" class="after:content-['|'] last:after:content-[''] after:ps-1") {{ input.profile.email }}
 			span(v-if="input.profile.social" class="after:content-['|'] last:after:content-['']") {{ input.profile.social }}
-	.resume-body(:class="['space-y-4']")
+	.resume-body(class="space-y-4 !font-custom")
 		section#summary(v-if="input.summary.show")
 			h2.resume-title {{ input.summary.title.name }}
 			.details(v-if="input.summary.data")
@@ -59,7 +59,7 @@ defineExpose({
 				.details(v-for="(ref, idx) in input.references.data" :key="idx" class="p-4 *:text-[10pt]")
 					.ref(v-html="ref.reference" class="*:has-[li]:list-disc *:has-[li]:ps-2")
 
-	footer(v-if="input.footer.show" class="*:text-[10pt] absolute bottom-[.5in]")
+	footer(v-if="input.footer.show" class="*:text-[10pt] absolute bottom-[.5in] !font-custom")
 		.footer-title(class="font-semibold tracking-tight") {{ input.footer.data.name }}
 		.footer-text {{ input.footer.data.summary }}
 </template>

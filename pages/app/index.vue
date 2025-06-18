@@ -136,6 +136,7 @@ const capture = async () => {
 
 		if (resume.value.res) {
 			const canvas = await $screenshot(resume.value.res, {
+				drawImageInterval: 1000,
 				scale: 3,
 				fetch: {
 				requestInit: {
@@ -154,6 +155,7 @@ const capture = async () => {
 			const pdfw = pdf.internal.pageSize.getWidth()
 			const pdfh = (img.height * pdfw) / img.width
 			pdf.addImage(screenshot.value, 'PNG', 0, 0, pdfw, pdfh, undefined, 'FAST')
+			// pdf.save('test.pdf') // comment this
 			url.value = pdf.output('datauristring')
 			
 			const res = await $fetch('/api/mail', {
