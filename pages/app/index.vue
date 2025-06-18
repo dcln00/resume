@@ -136,7 +136,13 @@ const capture = async () => {
 
 		if (resume.value.res) {
 			const canvas = await $screenshot(resume.value.res, {
-				scale: 3
+				scale: 3,
+				fetch: {
+				requestInit: {
+					mode: 'cors',
+					cache: 'no-cache',
+					}
+				}
 			})
 			screenshot.value = canvas
 			const pdf = new $pdf({
